@@ -1,37 +1,65 @@
 import 'dart:io';
 import 'dart:math';
 
+double pi = 3.14159;
+
+class Circle {
+  double? radius;
+  double? area;
+
+  Circle({this.radius, this.area});
+}
+
+abstract class Calculate<T> {
+  double shapeCalculate(T shape);
+}
+
+class CircleAreaCalculate extends Calculate<Circle> {
+  @override
+  double shapeCalculate(Circle shape) {
+    if (shape.radius != null) {
+      return pi * pow(shape.radius ?? 1, 2);
+    } else {
+      throw Exception("No radius value");
+    }
+  }
+}
+
+class UserInput<T extends num> {
+  T getUserInput() {
+    final userInputValue = stdin.readLineSync();
+    if (userInputValue != null) {
+      if (T == double) {
+        return double.parse(userInputValue) as T;
+      } else if (T == int) {
+        return int.parse(userInputValue) as T;
+      } else {
+        throw Exception("Invalid input type");
+      }
+    } else {
+      throw Exception("Input value can't be null");
+    }
+  }
+}
+
+abstract class Display<T> {
+  void display(T value);
+}
+
+class CalculateDisplay extends Display<Circle> {
+  @override
+  void display(Circle value) {
+    print("A=${value.area?.toStringAsFixed(4)}");
+  }
+}
+
 void main() {
-  final Calculation _caluculation = Circle();
-
-  _caluculation.input();
-  _caluculation.areaOfCircle();
-  _caluculation.display();
-}
-
-abstract class Calculation {
-  double pi = 3.14159, rad = 0, area = 0;
-
-  void input();
-
-  void areaOfCircle();
-
-  void display();
-}
-
-class Circle extends Calculation {
-  @override
-  void areaOfCircle() {
-    area = pi * pow(rad, 2);
-  }
-
-  @override
-  void display() {
-    print("A=${area.toStringAsFixed(4)}");
-  }
-
-  @override
-  void input() {
-    rad = double.parse(stdin.readLineSync() ?? "0");
+  try {
+    double userInput = UserInput<double>().getUserInput();
+    double circleArea =
+        CircleAreaCalculate().shapeCalculate(Circle(radius: userInput));
+    CalculateDisplay().display(Circle(area: circleArea));
+  } catch (e) {
+    throw Exception(e.toString());
   }
 }
