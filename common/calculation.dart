@@ -24,12 +24,12 @@ enum Operations {
 }
 
 abstract class Calculation<T extends num> {
-  T calculate(Iterable<List<T>> values);
+  T calculate(List<T> values);
 }
 
 class CalculationImpl<T extends num> extends Calculation<T> {
   @override
-  T calculate(Iterable<List<T>> values) {
+  T calculate(List<T> values) {
     // TODO: implement calculate
     throw UnimplementedError();
   }
